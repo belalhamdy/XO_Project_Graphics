@@ -3,13 +3,13 @@
 #include "CC212SGL.h"
 
 #pragma comment(lib, "CC212SGL.lib")
-/*
-constants for application
-*/
+
+//constants for application
+
 #define GRID_SIZE 3
 #define EMPTY -1
 #define TIE 0
-#define GAME_IN_PROCESS GRID_SIZE*4
+#define GAME_IN_PROCESS (GRID_SIZE * 4)
 #define X 1
 #define O 0
 #define FONT_SIZE 30
@@ -66,13 +66,14 @@ int update_grid(int grid[GRID_SIZE][GRID_SIZE],int idx,int mark);
  
 
 /*
+Get stat of current grid
  Returns:
  * 0 TIE -> no one wins and TIE
  * +ve number <= GRID_SIZE(3) -> index of row that wins
  * -ve number <= GRID_SIZE(3) -> index of col that wins
  * GRID_SIZE + 1 (4) -> diagonal that goes from left to right wins
  * - (GRID_SIZE + 1) (-4) -> diagonal that goes from right to left wins
- * Anything Else -> GAME_IN_PROCESS (GRID_SIZE * 4)
+ * Anything Else -> GAME_IN_PROCESS (GRID_SIZE (3) * 4)
  */
 int check_win(int grid[GRID_SIZE][GRID_SIZE]);
 
@@ -130,7 +131,7 @@ int main()
                     reset = 1;
                     break;
                 }
-                if (update_grid(grid, play_idx - 1, first_player_mark))
+                if (update_grid(grid, play_idx - 1, first_player_mark) != 0)
                     break;
             }
             if (reset) break;
@@ -170,6 +171,7 @@ int main()
             continue;
         if (check_win(grid) == TIE)
             player_won = "TIE";
+
         g.beginDraw();
         draw_board(g, grid);
         draw_player_won_text(g, player_won);
@@ -178,7 +180,8 @@ int main()
         g.endDraw();
 
         int play_again = get_from_do_you_want_to_play_again(g);
-        if (play_again == 0) break;
+        if (play_again == 0)
+            break;
 
     }
 
@@ -221,7 +224,7 @@ int check_win(int grid[GRID_SIZE][GRID_SIZE]) {
 }
 
 /*
-* First try to find a row or column that contains 2 of `computer_mark` and there is an empty cell so you can win
+* First try to find a row or column or diagonal that contains 2 of `computer_mark` and there is an empty cell so you can win
 * If not found try to find a row or column that contains 2 of `opponent_mark` and there is an empty cell so you may lose
 * If not find a row or column or diagonal that does not contain the opponent mark
 * If not find any empty cell
@@ -382,8 +385,8 @@ int computer_turn(int grid[GRID_SIZE][GRID_SIZE], int computer_mark) {
 
 int update_grid(int grid[GRID_SIZE][GRID_SIZE], int idx, int mark)
 {
-    int i = idx / 3;
-    int j = idx % 3;
+    int i = idx / GRID_SIZE;
+    int j = idx % GRID_SIZE;
     if (grid[i][j] != EMPTY) return 0;
     grid[i][j] = mark;
     return 1;
@@ -424,25 +427,25 @@ void draw_Empty(CC212SGL& g, int x, int y, int val) {
 void draw_borders(CC212SGL& g) {
     g.setDrawingColor(COLORS::WHITE);
     // Vertical Lines
-    g.drawLine(UNIT, 0, UNIT, 3 * UNIT);
-    g.drawLine(2 * UNIT, 0, 2 * UNIT, 3 * UNIT);
+    g.drawLine(UNIT, 0, UNIT, GRID_SIZE * UNIT);
+    g.drawLine(2 * UNIT, 0, 2 * UNIT, GRID_SIZE * UNIT);
 
     // Horizontal Lines
-    g.drawLine(0, UNIT, 3 * UNIT, UNIT);
-    g.drawLine(0, 2 * UNIT, 3 * UNIT, 2 * UNIT);
+    g.drawLine(0, UNIT, GRID_SIZE * UNIT, UNIT);
+    g.drawLine(0, 2 * UNIT, GRID_SIZE * UNIT, 2 * UNIT);
 }
 void draw_winning_line(CC212SGL& g, int val) {
     g.setDrawingColor(COLORS::CYAN);
     g.setDrawingThickness(5);
     int startX = 0, startY = 0, endX = 0, endY = 0;
     int padding = UNIT / 2;
-    // column -> vertical
+    // column -> vertical -1 , -2 , -3
     if (val < 0 && val >= -GRID_SIZE) {
         val = (-1 * val) - 1;
         startX = endX = val * UNIT + padding;
         endY = 3 * UNIT;
     }
-    // row -> horizontal
+    // row -> horizontal 1 , 2 ,3
     else if (val > 0 && val <= GRID_SIZE) {
         val = val - 1;
         endX = 3 * UNIT;
@@ -544,7 +547,7 @@ int get_player_turn(CC212SGL& g)
                 return 8;
             if (input == '9')
                 return 9;
-            if (input == RESET_BUTTON)
+            if (input == RESET_BUTTON) // r
                 return 0;
         }
     }
