@@ -17,7 +17,7 @@ constants for application
 #define PADDING 30
 #define MARGIN 0
 #define UNIT (DRAW_SIZE + MARGIN)
-#define RESET_BUTTON 'R'
+#define RESET_BUTTON 'r'
 
 // draws the whole board on the screen
 void draw_board(CC212SGL& g, int grid[GRID_SIZE][GRID_SIZE]);
@@ -78,6 +78,8 @@ int check_win(int grid[GRID_SIZE][GRID_SIZE]);
 
 // Finds for the computer the best spot to play
 int computer_turn(int grid[GRID_SIZE][GRID_SIZE], int computer_mark);
+
+
 int main()
 {
 	CC212SGL g;
@@ -507,9 +509,9 @@ int get_from_do_you_want_to_play_again(CC212SGL& g)
         {
             input = _getch();	//Blocking Call
 
-            if (GetAsyncKeyState('1') || GetAsyncKeyState(RESET_BUTTON))
+            if (input == '1' || input == RESET_BUTTON)
                 return 1;
-            if (GetAsyncKeyState('2'))
+            if (input == '2')
                 return 0;
         }
     }
@@ -524,25 +526,25 @@ int get_player_turn(CC212SGL& g)
         {
             input = _getch();	//Blocking Call
 
-            if (GetAsyncKeyState('1'))
+            if (input == '1')
                 return 1;
-            if (GetAsyncKeyState('2'))
+            if (input == '2')
                 return 2;
-            if (GetAsyncKeyState('3'))
+            if (input == '3')
                 return 3;
-            if (GetAsyncKeyState('4'))
+            if (input == '4')
                 return 4;
-            if (GetAsyncKeyState('5'))
+            if (input == '5')
                 return 5;
-            if (GetAsyncKeyState('6'))
+            if (input == '6')
                 return 6;
-            if (GetAsyncKeyState('7'))
+            if (input == '7')
                 return 7;
-            if (GetAsyncKeyState('8'))
+            if (input == '8')
                 return 8;
-            if (GetAsyncKeyState('9'))
+            if (input == '9')
                 return 9;
-            if (GetAsyncKeyState(RESET_BUTTON))
+            if (input == RESET_BUTTON)
                 return 0;
         }
     }
@@ -556,11 +558,11 @@ int get_from_first_input_screen(CC212SGL& g) {
         {
             input = _getch();	//Blocking Call
 
-            if (GetAsyncKeyState('1'))
+            if (input == '1')
                 return 1;
-            if (GetAsyncKeyState('2'))
+            if (input == '2')
                 return 2;
-            if (GetAsyncKeyState('0'))
+            if (input == '0')
                 return 0;
         }
     }
