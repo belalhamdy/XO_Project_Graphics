@@ -400,8 +400,8 @@ void draw_board(CC212SGL& g, int grid[GRID_SIZE][GRID_SIZE]) {
     int i, j;
     for (i = 0; i < GRID_SIZE; ++i) {
         for (j = 0; j < GRID_SIZE; ++j) {
-            int position_x = (j * UNIT) + UNIT / 12;
-            int position_y = (i * UNIT) + UNIT / 6;
+            int position_x = (j * UNIT) + UNIT / 4.5;
+            int position_y = (i * UNIT) + UNIT / 30;
             if (grid[i][j] == X) draw_X(g, position_x, position_y);
             else if (grid[i][j] == O) draw_O(g, position_x, position_y);
             else if (grid[i][j] == EMPTY) draw_Empty(g, position_x, position_y, i * GRID_SIZE + j + 1);
